@@ -450,13 +450,14 @@ body {
         left: -100%;
         width: 100%;
         height: calc(100vh - 70px);
-        background: var(--glass-bg);
+        background: var(--primary-dark);
         backdrop-filter: blur(20px);
         flex-direction: column;
         justify-content: center;
         align-items: center;
         transition: left 0.3s ease;
         z-index: 999;
+        border-right: 1px solid var(--glass-border);
     }
     
     .nav-menu.active {
@@ -478,18 +479,60 @@ body {
     .nav-toggle.active span:nth-child(3) {
         transform: rotate(-45deg) translate(7px, -6px);
     }
+
+    .btn-cta {
+        display: none;
+    }
     
     .hero-actions {
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
+        width: 100%;
+        max-width: 300px;
     }
     
     .btn-primary, .btn-secondary {
-        width: 200px;
+        width: 100%;
     }
     
     .features-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .feature-card {
+        padding: 40px 30px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 40px;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-stats {
+        margin: 30px 0;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+    }
+
+    .gallery-grid-home {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .contact-card {
+        padding: 40px 30px;
     }
 }
 

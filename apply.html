@@ -360,25 +360,60 @@
 
         @media (max-width: 768px) {
             .form-steps {
-                padding: 20px;
+                padding: 20px 10px;
                 overflow-x: auto;
+                gap: 10px;
             }
             
             .step {
                 padding: 0 10px;
-                min-width: 80px;
+                min-width: 70px;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .step:not(:last-child)::after {
+                display: none;
             }
             
             .step-label {
-                font-size: 0.8rem;
+                font-size: 0.7rem;
+            }
+
+            .step-number {
+                width: 25px;
+                height: 25px;
+                font-size: 11px;
             }
             
             .form-content {
                 padding: 20px;
             }
+
+            .form-header {
+                padding: 30px 20px;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+
+            .form-subtitle {
+                font-size: 0.9rem;
+            }
             
             .form-actions {
-                flex-direction: column;
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .btn-prev, .form-actions .btn-primary {
+                font-size: 11px;
+                padding: 12px 20px;
+            }
+
+            .file-label {
+                padding: 30px 20px;
             }
         }
     </style>
