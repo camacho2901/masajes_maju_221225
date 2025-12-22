@@ -1,0 +1,112 @@
+{
+  "profiles": [
+    {
+      "id": 1,
+      "name": "Sofía",
+      "category": "relajante",
+      "tags": ["Masaje Relajante", "Aromaterapia", "Profesional"],
+      "experience": "2 años",
+      "rating": 4.9,
+      "avatar": "—",
+      "description": "Masajista profesional especializada en técnicas de relajación profunda y aromaterapia.",
+      "portfolio": [
+        "Masaje relajante",
+        "Aromaterapia",
+        "Masaje con piedras calientes",
+        "Reflexología"
+      ],
+      "location": "Santa Cruz, Bolivia",
+      "availability": "full-time",
+      "featured": true,
+      "dateJoined": "2024-01-15"
+    },
+    {
+      "id": 2,
+      "name": "Valentina",
+      "category": "terapeutico",
+      "tags": ["Masaje Terapéutico", "Descontracturante", "Experta"],
+      "experience": "3 años",
+      "rating": 4.8,
+      "avatar": "—",
+      "description": "Especialista en masajes terapéuticos y descontracturantes para aliviar tensiones.",
+      "portfolio": [
+        "Masaje descontracturante",
+        "Masaje deportivo",
+        "Masaje terapéutico",
+        "Tratamiento de espalda"
+      ],
+      "location": "Santa Cruz, Bolivia",
+      "availability": "flexible",
+      "featured": true,
+      "dateJoined": "2024-01-14"
+    },
+    {
+      "id": 3,
+      "name": "Carolina",
+      "category": "sensitivo",
+      "tags": ["Masaje Sensitivo", "Relajación Total", "Discreta"],
+      "experience": "1 año",
+      "rating": 4.7,
+      "avatar": "—",
+      "description": "Masajista joven y profesional, especializada en masajes sensitivos y relajación completa.",
+      "portfolio": [
+        "Masaje sensitivo",
+        "Relajación profunda",
+        "Masaje corporal completo",
+        "Ambiente acogedor"
+      ],
+      "location": "Santa Cruz, Bolivia",
+      "availability": "part-time",
+      "featured": true,
+      "dateJoined": "2024-01-13"
+    }
+  ],
+  "categories": [
+    {
+      "id": "relajante",
+      "name": "Masaje Relajante",
+      "description": "Masajes para relajación y bienestar general",
+      "icon": "—",
+      "color": "#D4AF37"
+    },
+    {
+      "id": "terapeutico",
+      "name": "Masaje Terapéutico",
+      "description": "Masajes descontracturantes y terapéuticos",
+      "icon": "—",
+      "color": "#C9A0A0"
+    },
+    {
+      "id": "sensitivo",
+      "name": "Masaje Sensitivo",
+      "description": "Masajes sensitivos para máxima relajación",
+      "icon": "—",
+      "color": "#D4AF37"
+    }
+  ],
+  "stats": {
+    "totalProfiles": 3,
+    "activeProfiles": 3,
+    "featuredProfiles": 3,
+    "averageRating": 4.8,
+    "totalExperience": "6 años combinados",
+    "locations": ["Santa Cruz"]
+  },
+  "settings": {
+    "siteName": "Masaje y Placer Maju",
+    "tagline": "Relájate. Disfruta. Renuévate.",
+    "description": "Masajes exclusivos para caballeros en Santa Cruz",
+    "contactEmail": "info@masajemaju.com",
+    "socialMedia": {
+      "instagram": "@masajemaju",
+      "whatsapp": "+59169245670"
+    },
+    "features": {
+      "ageVerification": true,
+      "profileRatings": true,
+      "advancedFilters": true,
+      "adminPanel": true,
+      "multiStepApplication": true
+    }
+  }
+}
