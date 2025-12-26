@@ -34,6 +34,7 @@
                 <a href="gallery.html" class="nav-link">Masajistas</a>
                 <a href="apply.html" class="nav-link">Trabaja con Nosotros</a>
                 <a href="index.html#contact" class="nav-link">Contacto</a>
+                <a href="admin.html" class="nav-link">Admin</a>
             </div>
             <div class="nav-toggle" id="navToggle">
                 <span></span>
@@ -48,15 +49,15 @@
     <section id="home" class="hero">
         <div class="particles-bg" id="particles"></div>
         <div class="hero-content">
-            <h1 class="hero-title">
+            <h1 class="hero-title" id="heroTitle">
                 <span class="title-line">MASAJE Y PLACER</span>
                 <span class="title-line">MAJU</span>
             </h1>
-            <p class="hero-subtitle">Relájate. Disfruta. Renuévate.</p>
-            <p class="hero-description">Masajes exclusivos para caballeros en Santa Cruz</p>
+            <p class="hero-subtitle" id="heroSubtitle">Relájate. Disfruta. Renuévate.</p>
+            <p class="hero-description" id="heroDescription">Masajes exclusivos para caballeros en Santa Cruz</p>
             <div class="hero-stats">
                 <div class="stat">
-                    <span class="stat-number" data-target="500">0</span>
+                    <span class="stat-number" data-target="0">0</span>
                     <span class="stat-label">Clientes Satisfechos</span>
                 </div>
             </div>
@@ -100,22 +101,22 @@
             <h2 class="section-title">Nuestras Instalaciones</h2>
             <div class="gallery-grid-home">
                 <div class="gallery-item">
-                    <img src="assets/images/instalacion1.jpg" alt="Instalación 1">
+                    <img src="1.jpg" alt="Instalación 1">
                 </div>
                 <div class="gallery-item">
-                    <img src="assets/images/instalacion2.jpg" alt="Instalación 2">
+                    <img src="2.jpg" alt="Instalación 2">
                 </div>
                 <div class="gallery-item">
-                    <img src="assets/images/instalacion3.jpg" alt="Instalación 3">
+                    <img src="3.jpg" alt="Instalación 3">
                 </div>
                 <div class="gallery-item">
-                    <img src="assets/images/instalacion4.jpg" alt="Instalación 4">
+                    <img src="4.jpg" alt="Instalación 4">
                 </div>
                 <div class="gallery-item">
-                    <img src="assets/images/instalacion5.jpg" alt="Instalación 5">
+                    <img src="5.jpg" alt="Instalación 5">
                 </div>
                 <div class="gallery-item">
-                    <img src="assets/images/instalacion6.jpg" alt="Instalación 6">
+                    <img src="6.jpg" alt="Instalación 6">
                 </div>
             </div>
         </div>
@@ -174,21 +175,21 @@
                 <div class="contact-card">
                     <div class="contact-icon">—</div>
                     <h3>Dirección</h3>
-                    <p>Av. Brasil Calle: prolongación warnes</p>
+                    <p id="contactAddress">Av. Brasil Calle: prolongación warnes</p>
                     <p>Número 692</p>
                     <p>Santa Cruz, Bolivia</p>
+                    <p style="margin-top: 15px;"><a href="https://maps.app.goo.gl/BUydWQ51eADdXeKfA" target="_blank" style="color: var(--accent-gold); text-decoration: none; font-size: 0.9rem;">📍 Cómo llegar</a></p>
                 </div>
                 <div class="contact-card">
                     <div class="contact-icon">—</div>
                     <h3>WhatsApp</h3>
-                    <p><a href="https://wa.me/59169245670" target="_blank">+591 69245670</a></p>
+                    <p><a href="https://wa.me/59169245670" target="_blank" id="contactWhatsapp">+591 69245670</a></p>
                     <p style="margin-top: 15px; font-size: 0.9rem;">Haz clic para chatear</p>
                 </div>
                 <div class="contact-card">
                     <div class="contact-icon">—</div>
                     <h3>Horario</h3>
-                    <p>Lunes a Domingo</p>
-                    <p>10:00 AM - 10:00 PM</p>
+                    <p id="contactHours">Lunes a Domingo: 10:00 AM - 10:00 PM</p>
                     <p style="margin-top: 15px; font-size: 0.9rem;">Previa cita</p>
                 </div>
             </div>
@@ -261,6 +262,31 @@
             }
         }
     </style>
+
+    <!-- Footer -->
+    <footer style="background: var(--secondary-dark); border-top: 1px solid var(--glass-border); padding: 40px 20px; text-align: center;">
+        <div class="container">
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: var(--accent-gold); font-size: 18px; font-weight: 300; letter-spacing: 3px; margin-bottom: 15px;" id="footerTitle">MASAJE Y PLACER MAJU</h3>
+                <p style="color: var(--text-gray); font-size: 14px; font-weight: 300;" id="footerDescription">Masajes exclusivos para caballeros en Santa Cruz</p>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; flex-wrap: wrap;">
+                <div>
+                    <p style="color: var(--text-gray); font-size: 13px; font-weight: 300;"><strong style="color: var(--accent-gold);">Teléfono:</strong> <span id="footerPhone">+591 69245670</span></p>
+                </div>
+                <div>
+                    <p style="color: var(--text-gray); font-size: 13px; font-weight: 300;"><strong style="color: var(--accent-gold);">Dirección:</strong> <span id="footerAddress">Av. Brasil, N° 692, Santa Cruz</span></p>
+                </div>
+                <div>
+                    <p style="color: var(--text-gray); font-size: 13px; font-weight: 300;"><strong style="color: var(--accent-gold);">Horario:</strong> <span id="footerHours">Lun-Dom 10:00 AM - 10:00 PM</span></p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid var(--glass-border); padding-top: 20px; margin-top: 20px;">
+                <p style="color: var(--text-gray); font-size: 12px; font-weight: 300; margin-bottom: 8px;">© 2026 Masaje y Placer Maju. Todos los derechos reservados.</p>
+                <p style="color: var(--text-gray); font-size: 11px; font-weight: 300; opacity: 0.7;">Diseño y Desarrollo: <a href="https://wa.me/59169877877" target="_blank" style="color: var(--accent-gold); text-decoration: none; transition: var(--transition);">Vision Digital</a> • 59169877877</p>
+            </div>
+        </div>
+    </footer>
 
     <script src="js/app.js"></script>
 </body>

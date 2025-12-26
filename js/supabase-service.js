@@ -22,7 +22,8 @@ class SupabaseService {
                 headers: this.getHeaders(),
                 body: JSON.stringify({
                     nombre: data.artisticName,
-                    email: data.email,
+                    telefono: data.phone,
+                    email: data.email || '',
                     edad: parseInt(data.age),
                     categoria: data.category,
                     descripcion: data.description || '',

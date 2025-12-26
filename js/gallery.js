@@ -129,7 +129,8 @@ class GalleryManager {
         const names = {
             relajante: 'Masaje Relajante',
             terapeutico: 'Masaje Terapéutico',
-            sensitivo: 'Masaje Sensitivo'
+            sensitivo: 'Masaje Sensitivo',
+            otro: 'Otro'
         };
         return names[category] || category;
     }

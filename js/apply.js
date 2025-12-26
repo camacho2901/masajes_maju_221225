@@ -242,13 +242,13 @@ class ApplicationForm {
 
     // Manejar subida de archivos
     handleFileUpload(files) {
-        const maxFiles = 10;
+        const maxFiles = 5;
         const maxSize = 10 * 1024 * 1024; // 10MB
         const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
         Array.from(files).forEach(file => {
             if (this.uploadedFiles.length >= maxFiles) {
-                EliteTalentApp.showNotification('Máximo 10 archivos permitidos', 'warning');
+                EliteTalentApp.showNotification('Máximo 5 archivos permitidos', 'warning');
                 return;
             }
 
@@ -449,7 +449,8 @@ class ApplicationForm {
         const names = {
             relajante: 'Masaje Relajante',
             terapeutico: 'Masaje Terapéutico',
-            sensitivo: 'Masaje Sensitivo'
+            sensitivo: 'Masaje Sensitivo',
+            otro: 'Otro'
         };
         return names[category] || category;
     }

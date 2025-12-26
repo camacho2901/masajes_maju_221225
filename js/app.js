@@ -10,6 +10,7 @@ class EliteTalentApp {
         this.setupAnimations();
         this.setupParticles();
         this.setupCounters();
+        this.loadSiteSettings();
     }
 
     // Verificación de edad
@@ -198,9 +199,14 @@ class EliteTalentApp {
         const counters = document.querySelectorAll('[data-target]');
         
         const animateCounter = (counter) => {
-            const target = parseInt(counter.dataset.target);
-            const duration = 2000; // 2 segundos
-            const increment = target / (duration / 16); // 60fps
+            // Obtener visitas de localStorage
+            let visits = parseInt(localStorage.getItem('pageVisits') || '0');
+            visits++;
+            localStorage.setItem('pageVisits', visits.toString());
+            
+            const target = visits;
+            const duration = 2000;
+            const increment = target / (duration / 16);
             let current = 0;
             
             const updateCounter = () => {
@@ -367,6 +373,79 @@ class EliteTalentApp {
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
         };
+    }
+
+    // Cargar configuración del sitio desde localStorage
+    loadSiteSettings() {
+        const settings = JSON.parse(localStorage.getItem('siteSettings') || '{}');
+        
+        // Actualizar hero
+        if (settings.title) {
+            const heroTitle = document.getElementById('heroTitle');
+            if (heroTitle) {
+                const words = settings.title.split(' ');
+                const mid = Math.ceil(words.length / 2);
+                heroTitle.innerHTML = `
+                    <span class="title-line">${words.slice(0, mid).join(' ')}</span>
+                    <span class="title-line">${words.slice(mid).join(' ')}</span>
+                `;
+            }
+        }
+        
+        if (settings.subtitle) {
+            const heroSubtitle = document.getElementById('heroSubtitle');
+            if (heroSubtitle) heroSubtitle.textContent = settings.subtitle;
+        }
+        
+        if (settings.description) {
+            const heroDescription = document.getElementById('heroDescription');
+            if (heroDescription) heroDescription.textContent = settings.description;
+        }
+        
+        // Actualizar contacto
+        if (settings.address) {
+            const contactAddress = document.getElementById('contactAddress');
+            if (contactAddress) contactAddress.textContent = settings.address;
+        }
+        
+        if (settings.whatsapp) {
+            const contactWhatsapp = document.getElementById('contactWhatsapp');
+            if (contactWhatsapp) {
+                contactWhatsapp.textContent = settings.whatsapp;
+                contactWhatsapp.href = `https://wa.me/${settings.whatsapp.replace(/[^0-9]/g, '')}`;
+            }
+        }
+        
+        if (settings.hours) {
+            const contactHours = document.getElementById('contactHours');
+            if (contactHours) contactHours.textContent = settings.hours;
+        }
+        
+        // Actualizar footer
+        if (settings.title) {
+            const footerTitle = document.getElementById('footerTitle');
+            if (footerTitle) footerTitle.textContent = settings.title.toUpperCase();
+        }
+        
+        if (settings.description) {
+            const footerDescription = document.getElementById('footerDescription');
+            if (footerDescription) footerDescription.textContent = settings.description;
+        }
+        
+        if (settings.whatsapp) {
+            const footerPhone = document.getElementById('footerPhone');
+            if (footerPhone) footerPhone.textContent = settings.whatsapp;
+        }
+        
+        if (settings.address) {
+            const footerAddress = document.getElementById('footerAddress');
+            if (footerAddress) footerAddress.textContent = settings.address;
+        }
+        
+        if (settings.hours) {
+            const footerHours = document.getElementById('footerHours');
+            if (footerHours) footerHours.textContent = settings.hours;
+        }
     }
 }
 
