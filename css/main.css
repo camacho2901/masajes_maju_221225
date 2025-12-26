@@ -179,6 +179,10 @@ body {
     width: 100%;
 }
 
+.mobile-only {
+    display: none;
+}
+
 .nav-toggle {
     display: none;
     flex-direction: column;
@@ -482,6 +486,10 @@ body {
 
     .btn-cta {
         display: none;
+    }
+
+    .mobile-only {
+        display: block !important;
     }
     
     .hero-actions {
