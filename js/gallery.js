@@ -17,18 +17,29 @@ class GalleryManager {
 
     async loadProfiles() {
         try {
-            // Cargar desde localStorage (sincronizado con admin) o profiles.json
-            const savedStaff = localStorage.getItem('activeStaff');
-            if (savedStaff) {
-                this.profiles = JSON.parse(savedStaff);
+            // Cargar desde Supabase staff table
+            if (CONFIG.supabase.enabled) {
+                const response = await fetch(`${CONFIG.supabase.url}/rest/v1/staff?select=*`, {
+                    headers: {
+                        'apikey': CONFIG.supabase.anonKey,
+                        'Authorization': `Bearer ${CONFIG.supabase.anonKey}`
+                    }
+                });
+                
+                if (response.ok) {
+                    this.profiles = await response.json();
+                } else {
+                    this.profiles = typeof profilesData !== 'undefined' ? profilesData.profiles || [] : [];
+                }
             } else {
                 this.profiles = typeof profilesData !== 'undefined' ? profilesData.profiles || [] : [];
             }
+            
             this.filteredProfiles = [...this.profiles];
             this.renderProfiles();
         } catch (error) {
             console.error('Error:', error);
-            this.profiles = [];
+            this.profiles = typeof profilesData !== 'undefined' ? profilesData.profiles || [] : [];
             this.filteredProfiles = [];
             this.renderProfiles();
         }

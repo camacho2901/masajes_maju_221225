@@ -70,10 +70,25 @@ class AdminPanel {
 
     async loadData() {
         try {
-            // Cargar personal activo desde localStorage o profilesData
-            const savedStaff = localStorage.getItem('activeStaff');
-            if (savedStaff) {
-                this.activeStaff = JSON.parse(savedStaff);
+            // Cargar personal activo desde Supabase
+            if (CONFIG.supabase.enabled && typeof supabaseService !== 'undefined') {
+                try {
+                    const response = await fetch(`${CONFIG.supabase.url}/rest/v1/staff?select=*`, {
+                        headers: {
+                            'apikey': CONFIG.supabase.anonKey,
+                            'Authorization': `Bearer ${CONFIG.supabase.anonKey}`
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        this.activeStaff = await response.json();
+                    } else {
+                        this.activeStaff = typeof profilesData !== 'undefined' ? profilesData.profiles || [] : [];
+                    }
+                } catch (error) {
+                    console.error('Error loading staff:', error);
+                    this.activeStaff = typeof profilesData !== 'undefined' ? profilesData.profiles || [] : [];
+                }
             } else {
                 this.activeStaff = typeof profilesData !== 'undefined' ? profilesData.profiles || [] : [];
             }
@@ -359,11 +374,26 @@ class AdminPanel {
     deleteStaff(id) {
         if (!confirm('¿Estás seguro de eliminar a esta persona del personal activo?')) return;
         
-        this.activeStaff = this.activeStaff.filter(p => p.id !== id);
-        localStorage.setItem('activeStaff', JSON.stringify(this.activeStaff));
-        this.renderActiveStaff();
-        this.updateStats();
-        EliteTalentApp.showNotification('Persona eliminada', 'success');
+        if (CONFIG.supabase.enabled) {
+            fetch(`${CONFIG.supabase.url}/rest/v1/staff?id=eq.${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'apikey': CONFIG.supabase.anonKey,
+                    'Authorization': `Bearer ${CONFIG.supabase.anonKey}`
+                }
+            }).then(() => {
+                this.loadData();
+                EliteTalentApp.showNotification('Persona eliminada', 'success');
+            }).catch(error => {
+                console.error('Error:', error);
+                EliteTalentApp.showNotification('Error al eliminar', 'error');
+            });
+        } else {
+            this.activeStaff = this.activeStaff.filter(p => p.id !== id);
+            this.renderActiveStaff();
+            this.updateStats();
+            EliteTalentApp.showNotification('Persona eliminada', 'success');
+        }
     }
 
     openPersonModal() {
@@ -435,15 +465,38 @@ class AdminPanel {
             location: 'Santa Cruz, Bolivia',
             availability: 'full-time',
             featured: true,
-            dateJoined: new Date().toISOString()
+            tags: ['Masaje Tántrico Sensitivo'],
+            rating: 5.0,
+            date_joined: new Date().toISOString()
         };
 
-        this.activeStaff.push(newPerson);
-        localStorage.setItem('activeStaff', JSON.stringify(this.activeStaff));
-        this.renderActiveStaff();
-        this.updateStats();
-        this.closePersonModal();
-        EliteTalentApp.showNotification('Persona agregada exitosamente', 'success');
+        if (CONFIG.supabase.enabled) {
+            try {
+                await fetch(`${CONFIG.supabase.url}/rest/v1/staff`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': CONFIG.supabase.anonKey,
+                        'Authorization': `Bearer ${CONFIG.supabase.anonKey}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(newPerson)
+                });
+                
+                await this.loadData();
+                this.closePersonModal();
+                EliteTalentApp.showNotification('Persona agregada exitosamente', 'success');
+            } catch (error) {
+                console.error('Error:', error);
+                EliteTalentApp.showNotification('Error al agregar persona', 'error');
+            }
+        } else {
+            this.activeStaff.push(newPerson);
+            this.renderActiveStaff();
+            this.updateStats();
+            this.closePersonModal();
+            EliteTalentApp.showNotification('Persona agregada exitosamente', 'success');
+        }
     }
 
     setupModals() {

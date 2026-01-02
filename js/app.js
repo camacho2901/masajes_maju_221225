@@ -195,14 +195,38 @@ class EliteTalentApp {
     }
 
     // Contadores animados
-    setupCounters() {
+    async setupCounters() {
         const counters = document.querySelectorAll('[data-target]');
         
-        const animateCounter = (counter) => {
-            // Obtener visitas de localStorage
-            let visits = parseInt(localStorage.getItem('pageVisits') || '0');
-            visits++;
-            localStorage.setItem('pageVisits', visits.toString());
+        const animateCounter = async (counter) => {
+            // Obtener visitas de Supabase
+            let visits = 0;
+            
+            if (CONFIG.supabase.enabled) {
+                try {
+                    // Incrementar visitas en Supabase
+                    const response = await fetch(`${CONFIG.supabase.url}/rest/v1/rpc/increment_visits`, {
+                        method: 'POST',
+                        headers: {
+                            'apikey': CONFIG.supabase.anonKey,
+                            'Authorization': `Bearer ${CONFIG.supabase.anonKey}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        visits = data || 0;
+                    }
+                } catch (error) {
+                    console.error('Error syncing visits:', error);
+                    visits = parseInt(localStorage.getItem('pageVisits') || '0') + 1;
+                    localStorage.setItem('pageVisits', visits.toString());
+                }
+            } else {
+                visits = parseInt(localStorage.getItem('pageVisits') || '0') + 1;
+                localStorage.setItem('pageVisits', visits.toString());
+            }
             
             const target = visits;
             const duration = 2000;
