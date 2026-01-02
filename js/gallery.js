@@ -303,9 +303,6 @@ class GalleryManager {
         if (!favorites.includes(profileId)) {
             favorites.push(profileId);
             localStorage.setItem('favorites', JSON.stringify(favorites));
-            EliteTalentApp.showNotification('Agregado a favoritos ❤️', 'success');
-        } else {
-            EliteTalentApp.showNotification('Ya está en favoritos', 'info');
         }
     }
 

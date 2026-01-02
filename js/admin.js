@@ -50,7 +50,6 @@ class AdminPanel {
             if (password === 'Maju@2026') {
                 sessionStorage.setItem('adminAuth', 'true');
                 loginOverlay.classList.add('hidden');
-                EliteTalentApp.showNotification('Acceso concedido', 'success');
             } else {
                 EliteTalentApp.showNotification('Contraseña incorrecta', 'error');
                 passwordInput.value = '';
