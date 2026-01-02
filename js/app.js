@@ -199,24 +199,26 @@ class EliteTalentApp {
         const counters = document.querySelectorAll('[data-target]');
         
         const animateCounter = async (counter) => {
-            // Obtener visitas de Supabase
             let visits = 0;
             
             if (CONFIG.supabase.enabled) {
                 try {
-                    // Incrementar visitas en Supabase
                     const response = await fetch(`${CONFIG.supabase.url}/rest/v1/rpc/increment_visits`, {
                         method: 'POST',
                         headers: {
                             'apikey': CONFIG.supabase.anonKey,
                             'Authorization': `Bearer ${CONFIG.supabase.anonKey}`,
-                            'Content-Type': 'application/json'
-                        }
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify({})
                     });
                     
                     if (response.ok) {
-                        const data = await response.json();
-                        visits = data || 0;
+                        const text = await response.text();
+                        visits = text ? parseInt(text) : 0;
+                    } else {
+                        throw new Error('Response not ok');
                     }
                 } catch (error) {
                     console.error('Error syncing visits:', error);
