@@ -208,15 +208,16 @@ class EliteTalentApp {
                         headers: {
                             'apikey': CONFIG.supabase.anonKey,
                             'Authorization': `Bearer ${CONFIG.supabase.anonKey}`,
-                            'Content-Type': 'application/json',
-                            'Prefer': 'return=representation'
+                            'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({})
                     });
                     
                     if (response.ok) {
-                        const text = await response.text();
-                        visits = text ? parseInt(text) : 0;
+                        visits = await response.json();
+                        if (!visits || visits === 0) {
+                            throw new Error('Invalid response');
+                        }
                     } else {
                         throw new Error('Response not ok');
                     }
