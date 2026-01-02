@@ -2,12 +2,19 @@
 .DS_Store
 Thumbs.db
 
-# Archivos de configuración local
-js/config.js
-
-# Node modules (si usas npm en el futuro)
+# Node modules
 node_modules/
 
 # Archivos temporales
 *.log
 *.tmp
+
+# Archivos de backup
+*.bak
+*.backup
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo

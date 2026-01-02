@@ -473,8 +473,11 @@
                 <p class="form-subtitle">Buscamos mujeres de 18 a 30 años - Excelentes ingresos</p>
                 <div style="margin-top: 30px; padding: 20px; border: 1px solid var(--glass-border); border-radius: var(--border-radius); background: var(--glass-bg);">
                     <p style="color: var(--accent-gold); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; font-weight: 300;">Confidencialidad Garantizada</p>
-                    <p style="color: var(--text-gray); font-size: 14px; line-height: 1.8; font-weight: 300;">
+                    <p style="color: var(--text-gray); font-size: 14px; line-height: 1.8; font-weight: 300; margin-bottom: 12px;">
                         Trabajamos con absoluta discreción. Somos una empresa profesional establecida que valora la privacidad y seguridad de nuestro equipo. Ambiente de trabajo seguro, pagos puntuales y total confidencialidad.
+                    </p>
+                    <p style="color: var(--text-gray); font-size: 13px; line-height: 1.8; font-weight: 300; opacity: 0.9; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 12px; margin-top: 12px;">
+                        <strong style="color: var(--accent-gold);">Protección de Datos:</strong> Toda la información que compartas es tratada con máxima confidencialidad. Después de 5 días de procesada tu solicitud, todos tus datos personales y fotografías son eliminados permanentemente de nuestros sistemas. No guardamos registros ni archivos una vez finalizado el proceso de selección.
                     </p>
                 </div>
             </div>
@@ -536,17 +539,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Tipo de Masaje que Ofreces *</label>
-                            <select class="form-select" name="category" required>
-                                <option value="">Selecciona un tipo</option>
-                                <option value="relajante">Masaje Relajante</option>
-                                <option value="terapeutico">Masaje Terapéutico</option>
-                                <option value="sensitivo">Masaje Sensitivo</option>
-                                <option value="otro">Otro</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
                             <label class="form-label">Cuéntanos sobre ti</label>
                             <textarea class="form-textarea" name="description" 
                                       placeholder="Experiencia previa, habilidades, por qué quieres trabajar con nosotros..."></textarea>
@@ -574,9 +566,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Redes Sociales (opcional)</label>
+                            <label class="form-label">Instagram (opcional)</label>
                             <input type="url" class="form-input" name="instagram" 
-                                   placeholder="Instagram (opcional)">
+                                   placeholder="https://instagram.com/tu_usuario">
                         </div>
                     </div>
 
@@ -605,9 +597,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Zona de Residencia</label>
+                            <label class="form-label">Ubicación</label>
                             <input type="text" class="form-input" name="location" 
-                                   placeholder="Zona o barrio en Santa Cruz">
+                                   placeholder="Ciudad o país">
                         </div>
 
                         <div class="form-group">
@@ -623,22 +615,6 @@
                         
                         <div id="applicationSummary">
                             <!-- Se llenará dinámicamente -->
-                        </div>
-
-                        <div class="checkbox-group">
-                            <label class="custom-checkbox">
-                                <input type="checkbox" name="terms" required>
-                                <span class="checkmark"></span>
-                            </label>
-                            <label>Acepto las condiciones de trabajo y políticas del establecimiento *</label>
-                        </div>
-
-                        <div class="checkbox-group">
-                            <label class="custom-checkbox">
-                                <input type="checkbox" name="privacy">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label>Acepto el tratamiento de mis datos personales</label>
                         </div>
 
                         <div class="checkbox-group">
@@ -679,6 +655,7 @@
     <script src="js/config.js"></script>
     <script src="js/demo-data.js"></script>
     <script src="js/supabase-service.js"></script>
+    <script src="js/supabase-storage.js"></script>
     <script src="js/backblaze-service.js"></script>
     <script src="js/app.js"></script>
     <script src="js/apply.js"></script>

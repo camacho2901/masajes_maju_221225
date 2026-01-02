@@ -17,39 +17,19 @@ class GalleryManager {
 
     async loadProfiles() {
         try {
-            if (CONFIG.demoMode || !CONFIG.supabase.enabled) {
-                EliteTalentApp.showNotification('Modo Demo: Usando datos locales', 'info');
-                this.profiles = DEMO_DATA.profiles;
-                this.filteredProfiles = [...this.profiles];
-                this.renderProfiles();
-                return;
+            // Cargar desde localStorage (sincronizado con admin) o profiles.json
+            const savedStaff = localStorage.getItem('activeStaff');
+            if (savedStaff) {
+                this.profiles = JSON.parse(savedStaff);
+            } else {
+                this.profiles = typeof profilesData !== 'undefined' ? profilesData.profiles || [] : [];
             }
-
-            EliteTalentApp.showNotification('Cargando perfiles...', 'info');
-            const records = await supabaseService.getApprovedProfiles();
-            
-            this.profiles = records.map(record => ({
-                id: record.id,
-                name: record.nombre || 'Sin nombre',
-                category: record.categoria || 'other',
-                tags: this.getTagsByCategory(record.categoria),
-                experience: record.experiencia || 'No especificado',
-                rating: record.rating || 0,
-                avatar: record.imagenes && record.imagenes[0] 
-                    ? `<img src="${record.imagenes[0]}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` 
-                    : this.getAvatarByCategory(record.categoria),
-                description: record.descripcion || '',
-                portfolio: this.getPortfolioItems(record)
-            }));
-
             this.filteredProfiles = [...this.profiles];
             this.renderProfiles();
-            EliteTalentApp.showNotification(`${this.profiles.length} perfiles cargados`, 'success');
         } catch (error) {
             console.error('Error:', error);
-            EliteTalentApp.showNotification('Error. Usando datos locales.', 'warning');
-            this.profiles = DEMO_DATA.profiles;
-            this.filteredProfiles = [...this.profiles];
+            this.profiles = [];
+            this.filteredProfiles = [];
             this.renderProfiles();
         }
     }
@@ -101,18 +81,21 @@ class GalleryManager {
         card.dataset.category = profile.category;
         card.dataset.profileId = profile.id;
 
+        const imageHtml = profile.photo ? `<img src="${profile.photo}" style="width:100%;height:100%;object-fit:cover;">` : profile.avatar;
+        const tags = profile.tags || [];
+
         card.innerHTML = `
             <div class="profile-image">
-                ${profile.avatar}
+                ${imageHtml}
             </div>
             <div class="profile-info">
                 <h3 class="profile-name">${profile.name}</h3>
                 <p class="profile-category">${this.getCategoryName(profile.category)}</p>
                 <div class="profile-tags">
-                    ${profile.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
                 <div class="profile-stats">
-                    <span>⭐ ${profile.rating}</span>
+                    <span>⭐ ${profile.rating || 5.0}</span>
                     <span>📅 ${profile.experience}</span>
                 </div>
             </div>
@@ -126,13 +109,7 @@ class GalleryManager {
     }
 
     getCategoryName(category) {
-        const names = {
-            relajante: 'Masaje Relajante',
-            terapeutico: 'Masaje Terapéutico',
-            sensitivo: 'Masaje Sensitivo',
-            otro: 'Otro'
-        };
-        return names[category] || category;
+        return 'Masaje Tántrico Sensitivo';
     }
 
     setupFilters() {
@@ -211,35 +188,32 @@ class GalleryManager {
         const hasPrev = currentIndex > 0;
         const hasNext = currentIndex < this.filteredProfiles.length - 1;
 
+        const lightboxImageHtml = profile.photo ? `<img src="${profile.photo}" style="max-width: 300px; max-height: 300px; object-fit: cover; border-radius: var(--border-radius); margin-bottom: 20px; cursor: zoom-in;" id="lightboxAvatar">` : `<div class="lightbox-avatar" id="lightboxAvatar">${profile.avatar}</div>`;
+        const tags = profile.tags || [];
+        const portfolio = profile.portfolio || [];
+
         body.innerHTML = `
             <div class="lightbox-profile">
-                <div class="lightbox-avatar" id="lightboxAvatar">${profile.avatar}</div>
+                ${lightboxImageHtml}
                 <h2>${profile.name}</h2>
                 <p class="lightbox-category">${this.getCategoryName(profile.category)}</p>
                 <p class="lightbox-description">${profile.description}</p>
                 
                 <div class="lightbox-tags">
-                    ${profile.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
                 
                 <div class="lightbox-stats">
                     <div class="stat-item">
-                        <strong>Rating:</strong> ⭐ ${profile.rating}
+                        <strong>Rating:</strong> ⭐ ${profile.rating || 5.0}
                     </div>
                     <div class="stat-item">
                         <strong>Experiencia:</strong> ${profile.experience}
                     </div>
                 </div>
                 
-                <div class="lightbox-portfolio">
-                    <h3>Portfolio</h3>
-                    <ul>
-                        ${profile.portfolio.map(item => `<li>${item}</li>`).join('')}
-                    </ul>
-                </div>
-                
                 <div class="lightbox-actions">
-                    <button class="btn-primary" onclick="window.open('https://wa.me/59169245670?text=Hola, quiero reservar una cita', '_blank')">
+                    <button class="btn-primary" onclick="window.open('https://wa.me/59169245670?text=Quiero%20reservar%20una%20cita%20con%20${encodeURIComponent(profile.name)}', '_blank')">
                         Reservar por WhatsApp
                     </button>
                 </div>

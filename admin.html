@@ -447,29 +447,151 @@
 
         <!-- Estadísticas Section -->
         <div id="statsSection" class="admin-section" style="display: none;">
-            <h2 style="color: var(--accent-gold); font-weight: 300; letter-spacing: 2px; font-size: 1.5rem; margin-bottom: 30px;">Estadísticas</h2>
+            <h2 style="color: var(--accent-gold); font-weight: 300; letter-spacing: 2px; font-size: 1.5rem; margin-bottom: 30px;">Estadísticas en Tiempo Real</h2>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px; text-align: center;">
-                    <div style="font-size: 2.5rem; color: var(--accent-gold); margin-bottom: 10px;" id="statTotalVisits">0</div>
-                    <div style="color: var(--text-gray); font-size: 0.9rem; letter-spacing: 1px;">Visitas Totales</div>
+            <!-- Métricas Principales -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 20px; text-align: center;">
+                    <div style="font-size: 2.2rem; color: var(--accent-gold); margin-bottom: 8px; font-weight: 300;" id="statTotalVisits">0</div>
+                    <div style="color: var(--text-gray); font-size: 0.85rem; letter-spacing: 1px;">Visitas Totales</div>
                 </div>
-                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px; text-align: center;">
-                    <div style="font-size: 2.5rem; color: var(--accent-gold); margin-bottom: 10px;" id="statTotalStaff">0</div>
-                    <div style="color: var(--text-gray); font-size: 0.9rem; letter-spacing: 1px;">Personal Total</div>
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 20px; text-align: center;">
+                    <div style="font-size: 2.2rem; color: var(--accent-gold); margin-bottom: 8px; font-weight: 300;" id="statTotalStaff">0</div>
+                    <div style="color: var(--text-gray); font-size: 0.85rem; letter-spacing: 1px;">Personal Activo</div>
                 </div>
-                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px; text-align: center;">
-                    <div style="font-size: 2.5rem; color: var(--accent-gold); margin-bottom: 10px;" id="statAvgExperience">0</div>
-                    <div style="color: var(--text-gray); font-size: 0.9rem; letter-spacing: 1px;">Experiencia Promedio</div>
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 20px; text-align: center;">
+                    <div style="font-size: 2.2rem; color: var(--accent-gold); margin-bottom: 8px; font-weight: 300;" id="statTotalApplications">0</div>
+                    <div style="color: var(--text-gray); font-size: 0.85rem; letter-spacing: 1px;">Solicitudes</div>
+                </div>
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 20px; text-align: center;">
+                    <div style="font-size: 2.2rem; color: var(--accent-gold); margin-bottom: 8px; font-weight: 300;" id="statAvgExperience">0</div>
+                    <div style="color: var(--text-gray); font-size: 0.85rem; letter-spacing: 1px;">Exp. Promedio</div>
+                </div>
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 20px; text-align: center;">
+                    <div style="font-size: 2.2rem; color: #C9A0A0; margin-bottom: 8px; font-weight: 300;" id="statVisitsToday">0</div>
+                    <div style="color: var(--text-gray); font-size: 0.85rem; letter-spacing: 1px;">Visitas Hoy</div>
+                </div>
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 20px; text-align: center;">
+                    <div style="font-size: 2.2rem; color: #C9A0A0; margin-bottom: 8px; font-weight: 300;" id="statAvgAge">0</div>
+                    <div style="color: var(--text-gray); font-size: 0.85rem; letter-spacing: 1px;">Edad Promedio</div>
                 </div>
             </div>
 
-            <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px; margin-bottom: 20px;">
-                <h3 style="color: var(--accent-gold); font-weight: 300; margin-bottom: 20px; letter-spacing: 1.5px;">Personal por Categoría</h3>
-                <div id="categoryStats" style="display: grid; gap: 15px;">
-                    <!-- Se carga dinámicamente -->
+            <!-- Gráficas Principales -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px;">
+                    <h3 style="color: var(--accent-gold); font-weight: 300; margin-bottom: 20px; letter-spacing: 1.5px; font-size: 1rem;">Personal por Categoría</h3>
+                    <canvas id="categoryChart" style="max-height: 250px;"></canvas>
+                </div>
+
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px;">
+                    <h3 style="color: var(--accent-gold); font-weight: 300; margin-bottom: 20px; letter-spacing: 1.5px; font-size: 1rem;">Tendencia de Visitas</h3>
+                    <canvas id="visitsChart" style="max-height: 250px;"></canvas>
+                </div>
+
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px;">
+                    <h3 style="color: var(--accent-gold); font-weight: 300; margin-bottom: 20px; letter-spacing: 1.5px; font-size: 1rem;">Disponibilidad del Personal</h3>
+                    <canvas id="availabilityChart" style="max-height: 250px;"></canvas>
+                </div>
+
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px;">
+                    <h3 style="color: var(--accent-gold); font-weight: 300; margin-bottom: 20px; letter-spacing: 1.5px; font-size: 1rem;">Experiencia del Equipo</h3>
+                    <canvas id="experienceChart" style="max-height: 250px;"></canvas>
                 </div>
             </div>
+
+            <!-- Estadísticas Detalladas -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                <!-- Distribución por Categoría -->
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px;">
+                    <h3 style="color: var(--accent-gold); font-weight: 300; margin-bottom: 20px; letter-spacing: 1.5px;">Distribución Detallada</h3>
+                    <div id="categoryStats" style="display: grid; gap: 12px;">
+                        <!-- Se carga dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Top Personal -->
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px;">
+                    <h3 style="color: var(--accent-gold); font-weight: 300; margin-bottom: 20px; letter-spacing: 1.5px;">Personal Destacado</h3>
+                    <div id="topStaff" style="display: grid; gap: 12px;">
+                        <!-- Se carga dinámicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Métricas Adicionales -->
+            <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px;">
+                <h3 style="color: var(--accent-gold); font-weight: 300; margin-bottom: 20px; letter-spacing: 1.5px;">Resumen General</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div style="padding: 15px; background: rgba(255, 255, 255, 0.03); border-radius: var(--border-radius);">
+                        <div style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 8px;">Tasa de Conversión</div>
+                        <div style="color: var(--accent-gold); font-size: 1.5rem; font-weight: 300;" id="statConversionRate">0%</div>
+                    </div>
+                    <div style="padding: 15px; background: rgba(255, 255, 255, 0.03); border-radius: var(--border-radius);">
+                        <div style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 8px;">Personal Tiempo Completo</div>
+                        <div style="color: var(--accent-gold); font-size: 1.5rem; font-weight: 300;" id="statFullTime">0</div>
+                    </div>
+                    <div style="padding: 15px; background: rgba(255, 255, 255, 0.03); border-radius: var(--border-radius);">
+                        <div style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 8px;">Personal Medio Tiempo</div>
+                        <div style="color: var(--accent-gold); font-size: 1.5rem; font-weight: 300;" id="statPartTime">0</div>
+                    </div>
+                    <div style="padding: 15px; background: rgba(255, 255, 255, 0.03); border-radius: var(--border-radius);">
+                        <div style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 8px;">Última Actualización</div>
+                        <div style="color: var(--accent-gold); font-size: 1rem; font-weight: 300;" id="statLastUpdate">--:--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Métricas Avanzadas -->
+            <div style="margin-top: 40px;">
+                <h3 style="color: var(--accent-gold); font-weight: 300; margin-bottom: 30px; letter-spacing: 1.5px; font-size: 1.3rem; text-align: center;">Métricas Avanzadas</h3>
+                
+                <!-- KPIs Principales -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <div style="background: linear-gradient(135deg, #D4AF37 0%, #C9A0A0 100%); padding: 25px; border-radius: var(--border-radius); text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 300; margin-bottom: 10px;" id="metricConversionRate">0%</div>
+                        <div style="font-size: 0.85rem; opacity: 0.9;">Tasa de Conversión</div>
+                        <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 5px;" id="metricConversionTrend">—</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); padding: 25px; border-radius: var(--border-radius); text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 300; margin-bottom: 10px;" id="metricApprovalRate">0%</div>
+                        <div style="font-size: 0.85rem; opacity: 0.9;">Tasa de Aprobación</div>
+                        <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 5px;" id="metricApprovalTrend">—</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #007bff 0%, #6610f2 100%); padding: 25px; border-radius: var(--border-radius); text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 300; margin-bottom: 10px;" id="metricAvgResponseTime">0h</div>
+                        <div style="font-size: 0.85rem; opacity: 0.9;">Tiempo Respuesta Promedio</div>
+                        <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 5px;">Solicitudes procesadas</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%); padding: 25px; border-radius: var(--border-radius); text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 300; margin-bottom: 10px;" id="metricPendingApps">0</div>
+                        <div style="font-size: 0.85rem; opacity: 0.9;">Solicitudes Pendientes</div>
+                        <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 5px;" id="metricPendingPercent">0%</div>
+                    </div>
+                </div>
+
+                <!-- Gráficos Avanzados -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px;">
+                        <h3 style="color: var(--accent-gold); font-weight: 300; margin-bottom: 20px; letter-spacing: 1.5px; font-size: 1rem;">Solicitudes por Día (30 días)</h3>
+                        <canvas id="applicationsTimelineChart" style="max-height: 300px;"></canvas>
+                    </div>
+                    <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px;">
+                        <h3 style="color: var(--accent-gold); font-weight: 300; margin-bottom: 20px; letter-spacing: 1.5px; font-size: 1rem;">Estado de Solicitudes</h3>
+                        <canvas id="applicationStatusChart" style="max-height: 300px;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tabla de Rendimiento -->
+                <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 25px;">
+                    <h3 style="color: var(--accent-gold); font-weight: 300; margin-bottom: 20px; letter-spacing: 1.5px;">Rendimiento del Personal</h3>
+                    <div id="staffPerformanceTable" style="overflow-x: auto;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Métricas Avanzadas Section -->
+        <div id="metricsSection" class="admin-section" style="display: none;">
         </div>
 
         <!-- Configuración Section -->
@@ -554,14 +676,15 @@
                            style="width: 100%; padding: 12px 15px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: var(--border-radius); color: var(--text-white); font-size: 14px; font-weight: 300;">
                 </div>
                 <div style="margin-bottom: 20px;">
-                    <label style="display: block; color: var(--text-gray); font-size: 0.9rem; margin-bottom: 8px; font-weight: 300; letter-spacing: 1px;">Categoría *</label>
-                    <select id="personCategory" required
-                            style="width: 100%; padding: 12px 15px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: var(--border-radius); color: var(--text-white); font-size: 14px; font-weight: 300;">
-                        <option value="relajante">Masaje Relajante</option>
-                        <option value="terapeutico">Masaje Terapéutico</option>
-                        <option value="sensitivo">Masaje Sensitivo</option>
-                        <option value="otro">Otro</option>
-                    </select>
+                    <label style="display: block; color: var(--text-gray); font-size: 0.9rem; margin-bottom: 8px; font-weight: 300; letter-spacing: 1px;">Teléfono / WhatsApp</label>
+                    <input type="tel" id="personPhone" placeholder="Ej: 69245670"
+                           style="width: 100%; padding: 12px 15px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: var(--border-radius); color: var(--text-white); font-size: 14px; font-weight: 300;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; color: var(--text-gray); font-size: 0.9rem; margin-bottom: 8px; font-weight: 300; letter-spacing: 1px;">Foto</label>
+                    <input type="file" id="personPhoto" accept="image/*"
+                           style="width: 100%; padding: 12px 15px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: var(--border-radius); color: var(--text-white); font-size: 14px; font-weight: 300;">
+                    <div id="personPhotoPreview" style="margin-top: 10px; text-align: center;"></div>
                 </div>
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; color: var(--text-gray); font-size: 0.9rem; margin-bottom: 8px; font-weight: 300; letter-spacing: 1px;">Experiencia</label>
@@ -583,8 +706,10 @@
 
     <script src="js/config.js"></script>
     <script src="js/demo-data.js"></script>
+    <script src="js/supabase-storage.js"></script>
     <script src="js/supabase-service.js"></script>
     <script src="js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="js/admin.js"></script>
 </body>
 </html>

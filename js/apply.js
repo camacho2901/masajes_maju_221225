@@ -83,10 +83,14 @@ class ApplicationForm {
         // Actualizar pasos
         document.querySelectorAll('.form-step').forEach(step => {
             step.classList.remove('active');
+            step.style.display = 'none';
         });
         
-        const currentStep = document.querySelector(`[data-step="${this.currentStep}"]`);
-        if (currentStep) currentStep.classList.add('active');
+        const currentStep = document.querySelector(`.form-step[data-step="${this.currentStep}"]`);
+        if (currentStep) {
+            currentStep.classList.add('active');
+            currentStep.style.display = 'block';
+        }
 
         // Actualizar indicadores de paso
         document.querySelectorAll('.step').forEach((step, index) => {
@@ -115,7 +119,7 @@ class ApplicationForm {
         
         if (nextBtn) {
             if (this.currentStep === this.totalSteps) {
-                nextBtn.textContent = 'Enviar Aplicación';
+                nextBtn.textContent = 'ENVIAR SOLICITUD';
                 nextBtn.classList.add('animate-glow');
             } else {
                 nextBtn.textContent = 'Siguiente';
@@ -131,7 +135,7 @@ class ApplicationForm {
 
     // Validar paso actual
     validateCurrentStep() {
-        const currentStepElement = document.querySelector(`[data-step="${this.currentStep}"]`);
+        const currentStepElement = document.querySelector(`.form-step[data-step="${this.currentStep}"]`);
         if (!currentStepElement) return true;
         
         const requiredFields = currentStepElement.querySelectorAll('[required]');
@@ -147,14 +151,17 @@ class ApplicationForm {
                 this.clearFieldError(field);
                 
                 // Validaciones específicas
-                if (field.type === 'email' && !this.validateEmail(field.value)) {
+                if (field.type === 'email' && value && !this.validateEmail(field.value)) {
                     this.showFieldError(field, 'Email inválido');
                     isValid = false;
                 }
                 
-                if (field.name === 'age' && parseInt(field.value) < 18) {
-                    this.showFieldError(field, 'Debes ser mayor de 18 años');
-                    isValid = false;
+                if (field.name === 'age') {
+                    const age = parseInt(field.value);
+                    if (age < 18 || age > 30) {
+                        this.showFieldError(field, 'Debes tener entre 18 y 30 años');
+                        isValid = false;
+                    }
                 }
             }
         });
@@ -191,7 +198,9 @@ class ApplicationForm {
 
     // Guardar paso actual
     saveCurrentStep() {
-        const currentStepElement = document.querySelector(`[data-step="${this.currentStep}"]`);
+        const currentStepElement = document.querySelector(`.form-step[data-step="${this.currentStep}"]`);
+        if (!currentStepElement) return;
+        
         const inputs = currentStepElement.querySelectorAll('input, select, textarea');
         
         inputs.forEach(input => {
@@ -201,6 +210,9 @@ class ApplicationForm {
                 this.formData[input.name] = input.value;
             }
         });
+        
+        // Forzar categoría tántrico
+        this.formData.category = 'tantrico';
 
         localStorage.setItem('applicationData', JSON.stringify(this.formData));
     }
@@ -270,11 +282,13 @@ class ApplicationForm {
     // Agregar preview de archivo
     addFilePreview(file) {
         const preview = document.getElementById('filePreview');
+        if (!preview) return;
+        
         const item = document.createElement('div');
         item.className = 'preview-item';
+        item.style.cssText = 'position: relative; aspect-ratio: 1; background: var(--glass-bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem; overflow: hidden;';
         
         const isImage = file.type.startsWith('image/');
-        const isVideo = file.type.startsWith('video/');
         
         if (isImage) {
             const reader = new FileReader();
@@ -284,25 +298,27 @@ class ApplicationForm {
                 item.style.backgroundPosition = 'center';
             };
             reader.readAsDataURL(file);
-        } else if (isVideo) {
-            item.innerHTML = '🎥';
         } else {
-            item.innerHTML = '📄';
+            item.innerHTML = '📷';
         }
 
         const removeBtn = document.createElement('button');
         removeBtn.className = 'preview-remove';
         removeBtn.innerHTML = '×';
+        removeBtn.style.cssText = 'position: absolute; top: -5px; right: -5px; width: 20px; height: 20px; background: #dc3545; border: none; border-radius: 50%; color: white; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;';
         removeBtn.onclick = () => {
             const index = this.uploadedFiles.indexOf(file);
             if (index > -1) {
                 this.uploadedFiles.splice(index, 1);
                 item.remove();
+                EliteTalentApp.showNotification('Foto eliminada', 'info');
             }
         };
 
         item.appendChild(removeBtn);
         preview.appendChild(item);
+        
+        EliteTalentApp.showNotification(`Foto agregada (${this.uploadedFiles.length}/5)`, 'success');
     }
 
     // Configurar validación en tiempo real
@@ -338,16 +354,14 @@ class ApplicationForm {
             <div class="summary-section">
                 <h3>Información Personal</h3>
                 <p><strong>Nombre:</strong> ${this.formData.artisticName || 'No especificado'}</p>
-                <p><strong>Email:</strong> ${this.formData.email || 'No especificado'}</p>
+                <p><strong>Teléfono:</strong> ${this.formData.phone || 'No especificado'}</p>
                 <p><strong>Edad:</strong> ${this.formData.age || 'No especificado'}</p>
-                <p><strong>Categoría:</strong> ${this.getCategoryName(this.formData.category) || 'No especificado'}</p>
             </div>
             
             <div class="summary-section">
                 <h3>Portfolio</h3>
                 <p><strong>Archivos subidos:</strong> ${this.uploadedFiles.length}</p>
                 <p><strong>Instagram:</strong> ${this.formData.instagram || 'No especificado'}</p>
-                <p><strong>TikTok:</strong> ${this.formData.tiktok || 'No especificado'}</p>
             </div>
             
             <div class="summary-section">
@@ -370,7 +384,7 @@ class ApplicationForm {
                     margin-bottom: 20px;
                 }
                 .summary-section h3 {
-                    color: var(--accent-pink);
+                    color: var(--accent-gold);
                     margin-bottom: 15px;
                     font-size: 1.2rem;
                 }
@@ -393,35 +407,34 @@ class ApplicationForm {
         submitBtn.disabled = true;
 
         try {
-            if (CONFIG.demoMode || !CONFIG.supabase.enabled || !CONFIG.backblaze.enabled) {
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                EliteTalentApp.showNotification('Modo Demo: Aplicación simulada exitosamente', 'success');
-                this.showSuccessMessage();
-                localStorage.removeItem('applicationData');
-                return;
-            }
-
-            submitBtn.textContent = 'Subiendo imágenes...';
             let imageUrls = [];
+            
+            // Subir imágenes a Supabase Storage
             if (this.uploadedFiles.length > 0) {
+                submitBtn.textContent = 'Subiendo imágenes...';
                 EliteTalentApp.showNotification('Subiendo imágenes...', 'info');
-                imageUrls = await backblazeService.uploadMultiple(this.uploadedFiles);
+                
+                imageUrls = await supabaseStorage.uploadMultiple(this.uploadedFiles);
                 EliteTalentApp.showNotification(`${imageUrls.length} imágenes subidas`, 'success');
             }
 
-            submitBtn.textContent = 'Guardando datos...';
-            const applicationData = {
-                ...this.formData,
-                images: imageUrls.map(img => img.url)
-            };
-
-            await supabaseService.createApplication(applicationData);
+            // Guardar datos en Supabase
+            if (CONFIG.supabase.enabled) {
+                submitBtn.textContent = 'Guardando datos...';
+                const applicationData = {
+                    ...this.formData,
+                    images: imageUrls.map(img => img.url),
+                    category: 'tantrico'
+                };
+                await supabaseService.createApplication(applicationData);
+            }
+            
             EliteTalentApp.showNotification('¡Aplicación enviada exitosamente!', 'success');
             this.showSuccessMessage();
             localStorage.removeItem('applicationData');
         } catch (error) {
             console.error('Error:', error);
-            EliteTalentApp.showNotification('Error al enviar. Inténtalo de nuevo.', 'error');
+            EliteTalentApp.showNotification(`Error: ${error.message}`, 'error');
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
         }

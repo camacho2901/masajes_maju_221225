@@ -21,22 +21,14 @@ class SupabaseService {
                 method: 'POST',
                 headers: this.getHeaders(),
                 body: JSON.stringify({
-                    nombre: data.artisticName,
-                    telefono: data.phone,
-                    email: data.email || '',
-                    edad: parseInt(data.age),
-                    categoria: data.category,
-                    descripcion: data.description || '',
-                    experiencia: data.experience || '',
-                    disponibilidad: data.availability || '',
-                    ubicacion: data.location || '',
-                    habilidades: data.skills || '',
+                    name: data.artisticName,
+                    phone: data.phone,
+                    age: parseInt(data.age),
                     instagram: data.instagram || '',
-                    tiktok: data.tiktok || '',
-                    estado: 'new',
-                    rating: 0,
-                    fecha: new Date().toISOString(),
-                    imagenes: data.images || []
+                    location: data.location || '',
+                    category: data.category,
+                    photos: data.images || [],
+                    status: 'pending'
                 })
             });
 
@@ -104,7 +96,7 @@ class SupabaseService {
 
     async getApprovedProfiles() {
         try {
-            const url = `${this.url}/rest/v1/${this.tableName}?estado=eq.approved&select=*`;
+            const url = `${this.url}/rest/v1/${this.tableName}?status=eq.approved&select=*`;
             const response = await fetch(url, {
                 headers: this.getHeaders()
             });
