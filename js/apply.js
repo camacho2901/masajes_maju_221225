@@ -311,14 +311,11 @@ class ApplicationForm {
             if (index > -1) {
                 this.uploadedFiles.splice(index, 1);
                 item.remove();
-                EliteTalentApp.showNotification('Foto eliminada', 'info');
             }
         };
 
         item.appendChild(removeBtn);
         preview.appendChild(item);
-        
-        EliteTalentApp.showNotification(`Foto agregada (${this.uploadedFiles.length}/5)`, 'success');
     }
 
     // Configurar validación en tiempo real
@@ -412,10 +409,8 @@ class ApplicationForm {
             // Subir imágenes a Supabase Storage
             if (this.uploadedFiles.length > 0) {
                 submitBtn.textContent = 'Subiendo imágenes...';
-                EliteTalentApp.showNotification('Subiendo imágenes...', 'info');
                 
                 imageUrls = await supabaseStorage.uploadMultiple(this.uploadedFiles);
-                EliteTalentApp.showNotification(`${imageUrls.length} imágenes subidas`, 'success');
             }
 
             // Guardar datos en Supabase
@@ -429,7 +424,6 @@ class ApplicationForm {
                 await supabaseService.createApplication(applicationData);
             }
             
-            EliteTalentApp.showNotification('¡Aplicación enviada exitosamente!', 'success');
             this.showSuccessMessage();
             localStorage.removeItem('applicationData');
         } catch (error) {
