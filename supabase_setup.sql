@@ -35,3 +35,19 @@ ALTER TABLE staff DISABLE ROW LEVEL SECURITY;
 -- Índices para mejor rendimiento
 CREATE INDEX IF NOT EXISTS idx_staff_category ON staff(category);
 CREATE INDEX IF NOT EXISTS idx_staff_availability ON staff(availability);
+
+-- Función para incrementar visitas
+CREATE OR REPLACE FUNCTION increment_visits()
+RETURNS INTEGER AS $$
+DECLARE
+  new_count INTEGER;
+BEGIN
+  UPDATE site_config 
+  SET value = (CAST(value AS INTEGER) + 1)::TEXT,
+      updated_at = NOW()
+  WHERE key = 'total_visits'
+  RETURNING CAST(value AS INTEGER) INTO new_count;
+  
+  RETURN new_count;
+END;
+$$ LANGUAGE plpgsql;
