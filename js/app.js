@@ -5,50 +5,11 @@ class EliteTalentApp {
     }
 
     init() {
-        this.setupAgeVerification();
         this.setupNavigation();
         this.setupAnimations();
         this.setupParticles();
         this.setupCounters();
         this.loadSiteSettings();
-    }
-
-    // Verificación de edad
-    setupAgeVerification() {
-        const overlay = document.getElementById('ageVerification');
-        if (!overlay) return; // Si no existe el overlay, salir
-        
-        const slider = document.getElementById('ageSlider');
-        const ageValue = document.getElementById('ageValue');
-        const confirmBtn = document.getElementById('confirmAge');
-
-        // Verificar si ya se confirmó la edad
-        if (localStorage.getItem('ageVerified') === 'true') {
-            overlay.classList.add('hidden');
-            return;
-        }
-
-        if (slider && ageValue && confirmBtn) {
-            slider.addEventListener('input', (e) => {
-                const age = e.target.value;
-                ageValue.textContent = age;
-                
-                if (age >= 18) {
-                    confirmBtn.disabled = false;
-                    confirmBtn.style.opacity = '1';
-                } else {
-                    confirmBtn.disabled = true;
-                    confirmBtn.style.opacity = '0.5';
-                }
-            });
-
-            confirmBtn.addEventListener('click', () => {
-                if (slider.value >= 18) {
-                    localStorage.setItem('ageVerified', 'true');
-                    overlay.classList.add('hidden');
-                }
-            });
-        }
     }
 
     // Navegación
