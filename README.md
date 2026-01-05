@@ -89,7 +89,7 @@ masaje_maju/
 - Tabla de rendimiento del personal
 
 ## 📱 Contacto
-- WhatsApp: +591 69245670
+- WhatsApp: +591 78513321
 - Dirección: Av. Brasil #692, Santa Cruz, Bolivia
 - Horario: Lun-Dom 10:00 AM - 10:00 PM
 
