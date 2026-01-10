@@ -166,12 +166,11 @@ class EliteTalentApp {
     // Contadores animados
     async setupCounters() {
         const counters = document.querySelectorAll('[data-target]');
-        if (counters.length === 0) return;
         
         const animateCounter = async (counter) => {
             let visits = 0;
             
-            if (typeof CONFIG !== 'undefined' && CONFIG.supabase?.enabled) {
+            if (CONFIG.supabase.enabled) {
                 try {
                     const response = await fetch(`${CONFIG.supabase.url}/rest/v1/rpc/increment_visits`, {
                         method: 'POST',

@@ -1,11 +1,9 @@
 // Servicio de Supabase Storage
 class SupabaseStorage {
     constructor() {
-        if (typeof CONFIG !== 'undefined' && CONFIG.supabase) {
-            this.url = CONFIG.supabase.url;
-            this.anonKey = CONFIG.supabase.anonKey;
-            this.bucket = CONFIG.supabase.storageBucket || 'applications';
-        }
+        this.url = CONFIG.supabase.url;
+        this.anonKey = CONFIG.supabase.anonKey;
+        this.bucket = CONFIG.supabase.storageBucket || 'applications';
     }
 
     async uploadImage(file) {
@@ -85,7 +83,4 @@ class SupabaseStorage {
 }
 
 // Instancia global
-let supabaseStorage;
-if (typeof CONFIG !== 'undefined' && CONFIG.supabase?.enabled) {
-    supabaseStorage = new SupabaseStorage();
-}
+const supabaseStorage = new SupabaseStorage();

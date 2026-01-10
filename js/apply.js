@@ -138,54 +138,34 @@ class ApplicationForm {
         const currentStepElement = document.querySelector(`.form-step[data-step="${this.currentStep}"]`);
         if (!currentStepElement) return true;
         
-        // Paso 1: validar nombre, teléfono y edad
-        if (this.currentStep === 1) {
-            const name = document.querySelector('[name="artisticName"]');
-            const phone = document.querySelector('[name="phone"]');
-            const age = document.querySelector('[name="age"]');
+        const requiredFields = currentStepElement.querySelectorAll('[required]');
+        let isValid = true;
+
+        requiredFields.forEach(field => {
+            const value = field.value ? field.value.trim() : '';
             
-            let isValid = true;
-            
-            if (!name.value.trim()) {
-                this.showFieldError(name, 'El nombre es obligatorio');
+            if (!value) {
+                this.showFieldError(field, 'Este campo es obligatorio');
                 isValid = false;
             } else {
-                this.clearFieldError(name);
-            }
-            
-            if (!phone.value.trim()) {
-                this.showFieldError(phone, 'El teléfono es obligatorio');
-                isValid = false;
-            } else {
-                this.clearFieldError(phone);
-            }
-            
-            if (!age.value.trim()) {
-                this.showFieldError(age, 'La edad es obligatoria');
-                isValid = false;
-            } else {
-                const ageValue = parseInt(age.value, 10);
-                if (ageValue < 18 || ageValue > 30) {
-                    this.showFieldError(age, 'Debes tener entre 18 y 30 años');
+                this.clearFieldError(field);
+                
+                if (field.type === 'email' && value && !this.validateEmail(field.value)) {
+                    this.showFieldError(field, 'Email inválido');
                     isValid = false;
-                } else {
-                    this.clearFieldError(age);
+                }
+                
+                if (field.name === 'age') {
+                    const age = parseInt(field.value, 10);
+                    if (age < 18 || age > 30) {
+                        this.showFieldError(field, 'Debes tener entre 18 y 30 años');
+                        isValid = false;
+                    }
                 }
             }
-            
-            return isValid;
-        }
-        
-        // Paso 4: validar checkbox
-        if (this.currentStep === 4) {
-            const checkbox = document.querySelector('[name="age18"]');
-            if (!checkbox.checked) {
-                EliteTalentApp.showNotification('Debes confirmar que eres mayor de 18 años', 'error');
-                return false;
-            }
-        }
-        
-        return true;
+        });
+
+        return isValid;
     }
 
     // Mostrar error en campo
@@ -425,14 +405,12 @@ class ApplicationForm {
         try {
             let imageUrls = [];
             
-            // Subir imágenes a Supabase Storage
-            if (this.uploadedFiles.length > 0 && typeof supabaseStorage !== 'undefined') {
+            if (this.uploadedFiles.length > 0) {
                 submitBtn.textContent = 'Subiendo imágenes...';
                 imageUrls = await supabaseStorage.uploadMultiple(this.uploadedFiles);
             }
 
-            // Guardar datos en Supabase
-            if (CONFIG.supabase?.enabled && typeof supabaseService !== 'undefined') {
+            if (CONFIG.supabase.enabled) {
                 submitBtn.textContent = 'Guardando datos...';
                 const applicationData = {
                     ...this.formData,
@@ -442,7 +420,6 @@ class ApplicationForm {
                 await supabaseService.createApplication(applicationData);
             }
             
-            // Enviar notificación por WhatsApp
             submitBtn.textContent = 'Enviando notificación...';
             this.sendWhatsAppNotification(imageUrls);
             
