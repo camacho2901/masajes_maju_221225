@@ -8,11 +8,20 @@ class SupabaseStorage {
 
     async uploadImage(file) {
         try {
+            // Validar tipo de archivo
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                throw new Error('Tipo de archivo no permitido');
+            }
+
+            // Validar tamaño (10MB máximo)
+            const maxSize = 10 * 1024 * 1024;
+            if (file.size > maxSize) {
+                throw new Error('Archivo muy grande (máximo 10MB)');
+            }
+
             const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
             const filePath = `photos/${fileName}`;
-
-            const formData = new FormData();
-            formData.append('file', file);
 
             const response = await fetch(`${this.url}/storage/v1/object/${this.bucket}/${filePath}`, {
                 method: 'POST',

@@ -39,13 +39,18 @@ class EliteTalentApp {
         });
 
         // Header scroll effect
+        let lastScrollY = 0;
         window.addEventListener('scroll', () => {
             const header = document.querySelector('.header');
-            if (window.scrollY > 100) {
+            if (!header) return;
+            
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > 100) {
                 header.style.background = 'rgba(10, 10, 15, 0.95)';
             } else {
                 header.style.background = 'rgba(255, 255, 255, 0.1)';
             }
+            lastScrollY = currentScrollY;
         });
     }
 
@@ -70,14 +75,21 @@ class EliteTalentApp {
         });
 
         // Efecto parallax simple
+        let ticking = false;
         window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const parallaxElements = document.querySelectorAll('.parallax');
-            
-            parallaxElements.forEach(element => {
-                const speed = element.dataset.speed || 0.5;
-                element.style.transform = `translateY(${scrolled * speed}px)`;
-            });
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const parallaxElements = document.querySelectorAll('.parallax');
+                    
+                    parallaxElements.forEach(element => {
+                        const speed = parseFloat(element.dataset.speed) || 0.5;
+                        element.style.transform = `translateY(${scrolled * speed}px)`;
+                    });
+                    ticking = false;
+                });
+                ticking = true;
+            }
         });
     }
 
@@ -121,12 +133,8 @@ class EliteTalentApp {
                 this.y += this.speedY;
                 this.x += this.speedX;
 
-                if (this.y > canvas.height) {
+                if (this.y > canvas.height || this.x < 0 || this.x > canvas.width) {
                     this.reset();
-                }
-
-                if (this.x < 0 || this.x > canvas.width) {
-                    this.speedX *= -1;
                 }
             }
 
@@ -184,11 +192,11 @@ class EliteTalentApp {
                     }
                 } catch (error) {
                     console.error('Error syncing visits:', error);
-                    visits = parseInt(localStorage.getItem('pageVisits') || '0') + 1;
+                    visits = parseInt(localStorage.getItem('pageVisits') || '0', 10) + 1;
                     localStorage.setItem('pageVisits', visits.toString());
                 }
             } else {
-                visits = parseInt(localStorage.getItem('pageVisits') || '0') + 1;
+                visits = parseInt(localStorage.getItem('pageVisits') || '0', 10) + 1;
                 localStorage.setItem('pageVisits', visits.toString());
             }
             
@@ -348,7 +356,7 @@ class EliteTalentApp {
 
     static validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
+        return re.test(String(email).toLowerCase());
     }
 
     static debounce(func, wait) {

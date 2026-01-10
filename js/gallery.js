@@ -18,7 +18,7 @@ class GalleryManager {
     async loadProfiles() {
         try {
             // Cargar desde Supabase staff table
-            if (CONFIG.supabase.enabled) {
+            if (CONFIG.supabase?.enabled) {
                 const response = await fetch(`${CONFIG.supabase.url}/rest/v1/staff?select=*`, {
                     headers: {
                         'apikey': CONFIG.supabase.anonKey,
@@ -29,7 +29,7 @@ class GalleryManager {
                 if (response.ok) {
                     this.profiles = await response.json();
                 } else {
-                    this.profiles = typeof profilesData !== 'undefined' ? profilesData.profiles || [] : [];
+                    throw new Error('Failed to load profiles');
                 }
             } else {
                 this.profiles = typeof profilesData !== 'undefined' ? profilesData.profiles || [] : [];
@@ -40,7 +40,7 @@ class GalleryManager {
         } catch (error) {
             console.error('Error:', error);
             this.profiles = typeof profilesData !== 'undefined' ? profilesData.profiles || [] : [];
-            this.filteredProfiles = [];
+            this.filteredProfiles = [...this.profiles];
             this.renderProfiles();
         }
     }
@@ -155,8 +155,8 @@ class GalleryManager {
             const matchesFilter = this.currentFilter === 'all' || profile.category === this.currentFilter;
             const matchesSearch = this.searchTerm === '' || 
                 profile.name.toLowerCase().includes(this.searchTerm) ||
-                profile.category.toLowerCase().includes(this.searchTerm) ||
-                profile.tags.some(tag => tag.toLowerCase().includes(this.searchTerm));
+                (profile.category && profile.category.toLowerCase().includes(this.searchTerm)) ||
+                (Array.isArray(profile.tags) && profile.tags.some(tag => tag.toLowerCase().includes(this.searchTerm)));
             
             return matchesFilter && matchesSearch;
         });
@@ -224,7 +224,7 @@ class GalleryManager {
                 </div>
                 
                 <div class="lightbox-actions">
-                    <button class="btn-primary" onclick="window.open('https://wa.me/59169245670?text=Quiero%20reservar%20una%20cita%20con%20${encodeURIComponent(profile.name)}', '_blank')">
+                    <button class="btn-primary" onclick="window.open('https://wa.me/59169245670?text=Quiero%20reservar%20una%20cita%20con%20${encodeURIComponent(profile.name)}', '_blank', 'noopener,noreferrer')">
                         Reservar por WhatsApp
                     </button>
                 </div>

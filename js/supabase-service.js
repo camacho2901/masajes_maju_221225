@@ -17,19 +17,21 @@ class SupabaseService {
 
     async createApplication(data) {
         try {
+            const sanitizedData = {
+                name: String(data.artisticName || '').trim(),
+                phone: String(data.phone || '').trim(),
+                age: parseInt(data.age, 10) || 0,
+                instagram: String(data.instagram || '').trim(),
+                location: String(data.location || '').trim(),
+                category: String(data.category || 'tantrico').trim(),
+                photos: Array.isArray(data.images) ? data.images : [],
+                status: 'pending'
+            };
+
             const response = await fetch(`${this.url}/rest/v1/${this.tableName}`, {
                 method: 'POST',
                 headers: this.getHeaders(),
-                body: JSON.stringify({
-                    name: data.artisticName,
-                    phone: data.phone,
-                    age: parseInt(data.age),
-                    instagram: data.instagram || '',
-                    location: data.location || '',
-                    category: data.category,
-                    photos: data.images || [],
-                    status: 'pending'
-                })
+                body: JSON.stringify(sanitizedData)
             });
 
             if (!response.ok) throw new Error('Error al crear aplicación');

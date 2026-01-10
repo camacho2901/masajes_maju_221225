@@ -157,7 +157,7 @@ class ApplicationForm {
                 }
                 
                 if (field.name === 'age') {
-                    const age = parseInt(field.value);
+                    const age = parseInt(field.value, 10);
                     if (age < 18 || age > 30) {
                         this.showFieldError(field, 'Debes tener entre 18 y 30 años');
                         isValid = false;
@@ -409,12 +409,11 @@ class ApplicationForm {
             // Subir imágenes a Supabase Storage
             if (this.uploadedFiles.length > 0) {
                 submitBtn.textContent = 'Subiendo imágenes...';
-                
                 imageUrls = await supabaseStorage.uploadMultiple(this.uploadedFiles);
             }
 
             // Guardar datos en Supabase
-            if (CONFIG.supabase.enabled) {
+            if (CONFIG.supabase?.enabled && typeof supabaseService !== 'undefined') {
                 submitBtn.textContent = 'Guardando datos...';
                 const applicationData = {
                     ...this.formData,
@@ -424,6 +423,10 @@ class ApplicationForm {
                 await supabaseService.createApplication(applicationData);
             }
             
+            // Enviar notificación por WhatsApp
+            submitBtn.textContent = 'Enviando notificación...';
+            this.sendWhatsAppNotification(imageUrls);
+            
             this.showSuccessMessage();
             localStorage.removeItem('applicationData');
         } catch (error) {
@@ -432,6 +435,51 @@ class ApplicationForm {
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
         }
+    }
+
+    sendWhatsAppNotification(imageUrls) {
+        const data = this.formData;
+        const phone = '59177157896';
+        
+        let message = `🌟 *NUEVA POSTULANTE* 🌟\n\n`;
+        message += `👤 *Información Personal*\n`;
+        message += `• Nombre: ${data.artisticName || 'No especificado'}\n`;
+        message += `• Teléfono: ${data.phone || 'No especificado'}\n`;
+        message += `• Edad: ${data.age || 'No especificado'} años\n`;
+        message += `• Email: ${data.email || 'No especificado'}\n\n`;
+        
+        message += `📸 *Portfolio*\n`;
+        message += `• Fotos subidas: ${imageUrls.length}\n`;
+        message += `• Instagram: ${data.instagram || 'No especificado'}\n\n`;
+        
+        message += `💼 *Detalles Profesionales*\n`;
+        message += `• Experiencia: ${data.experience || 'No especificado'}\n`;
+        message += `• Disponibilidad: ${data.availability || 'No especificado'}\n`;
+        message += `• Ubicación: ${data.location || 'No especificado'}\n\n`;
+        
+        if (data.description) {
+            message += `📝 *Sobre ella*\n${data.description}\n\n`;
+        }
+        
+        if (data.skills) {
+            message += `✨ *Información Adicional*\n${data.skills}\n\n`;
+        }
+        
+        if (imageUrls.length > 0) {
+            message += `🔗 *Enlaces de Fotos*\n`;
+            imageUrls.forEach((img, index) => {
+                message += `${index + 1}. ${img.url}\n`;
+            });
+            message += `\n`;
+        }
+        
+        message += `⏰ *Fecha de Postulación*\n${new Date().toLocaleString('es-ES')}\n\n`;
+        message += `📱 *Acción Requerida*\nRevisar en el panel administrativo`;
+        
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
+        
+        window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
     }
 
     // Mostrar mensaje de éxito
@@ -465,7 +513,7 @@ class ApplicationForm {
     // Validar email
     validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
+        return re.test(String(email).toLowerCase());
     }
 }
 

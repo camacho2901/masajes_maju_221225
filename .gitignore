@@ -18,3 +18,14 @@ node_modules/
 .idea/
 *.swp
 *.swo
+
+# Variables de entorno
+.env
+.env.local
+.env.production
+config.js
+
+# Archivos sensibles
+*.key
+*.pem
+*.cert

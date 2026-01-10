@@ -12,7 +12,9 @@ const profilesData = {
             description: "Masajista profesional especializada en técnicas tántricas y masaje sensitivo.",
             portfolio: ["Masaje tántrico", "Masaje sensitivo", "Relajación profunda"],
             location: "Santa Cruz, Bolivia",
-            availability: "full-time"
+            availability: "full-time",
+            featured: true,
+            photo: null
         },
         {
             id: 2,
@@ -25,7 +27,9 @@ const profilesData = {
             description: "Especialista en masajes tántricos sensitivos para máxima relajación.",
             portfolio: ["Masaje tántrico", "Masaje sensitivo", "Experiencia completa"],
             location: "Santa Cruz, Bolivia",
-            availability: "flexible"
+            availability: "flexible",
+            featured: true,
+            photo: null
         },
         {
             id: 3,
@@ -38,9 +42,15 @@ const profilesData = {
             description: "Masajista joven y profesional, especializada en masajes tántricos sensitivos.",
             portfolio: ["Masaje tántrico", "Masaje sensitivo", "Ambiente acogedor"],
             location: "Santa Cruz, Bolivia",
-            availability: "part-time"
+            availability: "part-time",
+            featured: false,
+            photo: null
         }
     ]
 };
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = profilesData;
+}
 
 const DEMO_DATA = profilesData;

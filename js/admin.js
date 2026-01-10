@@ -47,7 +47,8 @@ class AdminPanel {
 
         loginBtn.addEventListener('click', () => {
             const password = passwordInput.value;
-            if (password === 'Maju@2026') {
+            // TODO: Implementar hash seguro de contraseña
+            if (password === CONFIG.adminPasswordHash) {
                 sessionStorage.setItem('adminAuth', 'true');
                 loginOverlay.classList.add('hidden');
             } else {
@@ -71,7 +72,7 @@ class AdminPanel {
     async loadData() {
         try {
             // Cargar personal activo desde Supabase
-            if (CONFIG.supabase.enabled && typeof supabaseService !== 'undefined') {
+            if (CONFIG.supabase?.enabled && typeof supabaseService !== 'undefined') {
                 try {
                     const response = await fetch(`${CONFIG.supabase.url}/rest/v1/staff?select=*`, {
                         headers: {
@@ -83,7 +84,7 @@ class AdminPanel {
                     if (response.ok) {
                         this.activeStaff = await response.json();
                     } else {
-                        this.activeStaff = typeof profilesData !== 'undefined' ? profilesData.profiles || [] : [];
+                        throw new Error('Failed to load staff');
                     }
                 } catch (error) {
                     console.error('Error loading staff:', error);
@@ -94,7 +95,7 @@ class AdminPanel {
             }
 
             // Cargar solicitudes desde Supabase
-            if (typeof CONFIG !== 'undefined' && CONFIG.supabase.enabled && typeof supabaseService !== 'undefined') {
+            if (CONFIG.supabase?.enabled && typeof supabaseService !== 'undefined') {
                 try {
                     const records = await supabaseService.getApplications();
                     this.applications = records.map(record => ({
@@ -105,7 +106,7 @@ class AdminPanel {
                         age: record.age || 0,
                         category: record.category || 'tantrico',
                         location: record.location || '',
-                        photos: record.photos || [],
+                        photos: Array.isArray(record.photos) ? record.photos : [],
                         status: record.status || 'pending',
                         date: new Date(record.created_at || Date.now())
                     }));
@@ -374,7 +375,7 @@ class AdminPanel {
     deleteStaff(id) {
         if (!confirm('¿Estás seguro de eliminar a esta persona del personal activo?')) return;
         
-        if (CONFIG.supabase.enabled) {
+        if (CONFIG.supabase?.enabled) {
             fetch(`${CONFIG.supabase.url}/rest/v1/staff?id=eq.${id}`, {
                 method: 'DELETE',
                 headers: {
@@ -470,7 +471,7 @@ class AdminPanel {
             date_joined: new Date().toISOString()
         };
 
-        if (CONFIG.supabase.enabled) {
+        if (CONFIG.supabase?.enabled) {
             try {
                 await fetch(`${CONFIG.supabase.url}/rest/v1/staff`, {
                     method: 'POST',
