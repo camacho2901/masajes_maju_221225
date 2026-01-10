@@ -2,8 +2,8 @@
 const CONFIG = {
     // Supabase Configuration
     supabase: {
-        url: process.env.SUPABASE_URL || 'https://mmfdmqyrkfcsayrjbiml.supabase.co',
-        anonKey: process.env.SUPABASE_ANON_KEY || 'sb_publishable_5Krtx0RKThinc5lTEbwC_A_U8WxxRvg',
+        url: 'https://mmfdmqyrkfcsayrjbiml.supabase.co',
+        anonKey: 'sb_publishable_5Krtx0RKThinc5lTEbwC_A_U8WxxRvg',
         enabled: true,
         storageBucket: 'masaje-placer'
     },
