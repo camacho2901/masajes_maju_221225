@@ -138,35 +138,54 @@ class ApplicationForm {
         const currentStepElement = document.querySelector(`.form-step[data-step="${this.currentStep}"]`);
         if (!currentStepElement) return true;
         
-        const requiredFields = currentStepElement.querySelectorAll('[required]');
-        let isValid = true;
-
-        requiredFields.forEach(field => {
-            const value = field.value ? field.value.trim() : '';
+        // Paso 1: validar nombre, teléfono y edad
+        if (this.currentStep === 1) {
+            const name = document.querySelector('[name="artisticName"]');
+            const phone = document.querySelector('[name="phone"]');
+            const age = document.querySelector('[name="age"]');
             
-            if (!value) {
-                this.showFieldError(field, 'Este campo es obligatorio');
+            let isValid = true;
+            
+            if (!name.value.trim()) {
+                this.showFieldError(name, 'El nombre es obligatorio');
                 isValid = false;
             } else {
-                this.clearFieldError(field);
-                
-                // Validaciones específicas
-                if (field.type === 'email' && value && !this.validateEmail(field.value)) {
-                    this.showFieldError(field, 'Email inválido');
+                this.clearFieldError(name);
+            }
+            
+            if (!phone.value.trim()) {
+                this.showFieldError(phone, 'El teléfono es obligatorio');
+                isValid = false;
+            } else {
+                this.clearFieldError(phone);
+            }
+            
+            if (!age.value.trim()) {
+                this.showFieldError(age, 'La edad es obligatoria');
+                isValid = false;
+            } else {
+                const ageValue = parseInt(age.value, 10);
+                if (ageValue < 18 || ageValue > 30) {
+                    this.showFieldError(age, 'Debes tener entre 18 y 30 años');
                     isValid = false;
-                }
-                
-                if (field.name === 'age') {
-                    const age = parseInt(field.value, 10);
-                    if (age < 18 || age > 30) {
-                        this.showFieldError(field, 'Debes tener entre 18 y 30 años');
-                        isValid = false;
-                    }
+                } else {
+                    this.clearFieldError(age);
                 }
             }
-        });
-
-        return isValid;
+            
+            return isValid;
+        }
+        
+        // Paso 4: validar checkbox
+        if (this.currentStep === 4) {
+            const checkbox = document.querySelector('[name="age18"]');
+            if (!checkbox.checked) {
+                EliteTalentApp.showNotification('Debes confirmar que eres mayor de 18 años', 'error');
+                return false;
+            }
+        }
+        
+        return true;
     }
 
     // Mostrar error en campo
