@@ -426,7 +426,7 @@ class ApplicationForm {
             let imageUrls = [];
             
             // Subir imágenes a Supabase Storage
-            if (this.uploadedFiles.length > 0) {
+            if (this.uploadedFiles.length > 0 && typeof supabaseStorage !== 'undefined') {
                 submitBtn.textContent = 'Subiendo imágenes...';
                 imageUrls = await supabaseStorage.uploadMultiple(this.uploadedFiles);
             }
