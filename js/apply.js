@@ -407,17 +407,25 @@ class ApplicationForm {
             
             if (this.uploadedFiles.length > 0) {
                 submitBtn.textContent = 'Subiendo imágenes...';
-                imageUrls = await supabaseStorage.uploadMultiple(this.uploadedFiles);
+                try {
+                    imageUrls = await supabaseStorage.uploadMultiple(this.uploadedFiles);
+                } catch (err) {
+                    console.error('Error subiendo imágenes:', err);
+                }
             }
 
             if (CONFIG.supabase.enabled) {
                 submitBtn.textContent = 'Guardando datos...';
-                const applicationData = {
-                    ...this.formData,
-                    images: imageUrls.map(img => img.url),
-                    category: 'tantrico'
-                };
-                await supabaseService.createApplication(applicationData);
+                try {
+                    const applicationData = {
+                        ...this.formData,
+                        images: imageUrls.map(img => img.url),
+                        category: 'tantrico'
+                    };
+                    await supabaseService.createApplication(applicationData);
+                } catch (err) {
+                    console.error('Error guardando datos:', err);
+                }
             }
             
             submitBtn.textContent = 'Enviando notificación...';
