@@ -443,7 +443,7 @@ class ApplicationForm {
 
     sendWhatsAppNotification(imageUrls) {
         const data = this.formData;
-        const phone = '59177157896';
+        const phone = '59178513321';
         
         let message = `🌟 *NUEVA POSTULANTE* 🌟\n\n`;
         message += `👤 *Información Personal*\n`;
